@@ -1,0 +1,189 @@
+/* Подключение Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+/* Сброс стандартных стилей */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Общий стиль страницы */
+body {
+    background: repeating-linear-gradient(
+        45deg, 
+        #f0faff, 
+        #f0faff 10px, 
+        #dcecfb 10px, 
+        #dcecfb 20px
+    ), 
+    repeating-linear-gradient(
+        -45deg, 
+        #f0faff, 
+        #f0faff 10px, 
+        #aef2fc 10px, 
+        #aef2fc 20px
+    );
+    background-size: 20px 20px;
+    color: #333; /* Темно-серый цвет текста */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
+/* Шапка страницы */
+header {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 32px;
+    color: #2C5282; /* Темно-синий цвет заголовка */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Центральная секция с рамкой */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+    background-color: #FFFFFF; /* Белая картинка вокруг главной секции */
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Тонкая тень */
+    position: relative;
+    z-index: 1; /* Повышаем индекс, чтобы быть выше фона */
+}
+
+/* Содержимое центральной секции */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+}
+
+/* Задание */
+#task-text {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* Форма выбора ответа */
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* Кнопки */
+.buttons-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #7d2ae8; /* Темно-сиреневый цвет */
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #6c2acf; /* Немного осветлённый сиреневый при наведении */
+}
+
+button:active {
+    transform: scale(0.98); /* Немного сжимается при нажатии */
+}
+
+/* Сообщение результата */
+#result {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* Контейнер подробного решения */
+.details-explanation {
+    width: 100%;
+    max-width: 500px; /* Максимальная ширина контейнера */
+    margin: 20px auto; /* Централизация контейнера */
+    padding: 20px;
+    background-color: #fafafa; /* Лёгкий серый фон */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Добавляем тонкую тень */
+    text-align: left; /* Текст выравниваем по левому краю */
+    font-size: 16px; /* Уменьшаем размер шрифта для комфортной читаемости */
+    line-height: 1.5; /* Межстрочный интервал для удобства восприятия */
+    white-space: pre-wrap; /* Перенос строк и поддержка формата */
+}
+
+/* Таблица с пояснениями (при необходимости)*/
+.table-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container th,
+.table-container td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-container th {
+    background-color: #7d2ae8;
+    color: #fff;
+}
+
+/* Медиазапросы для мобильников */
+@media screen and (max-width: 600px) {
+    main {
+        padding: 10px;
+    }
+
+    input[type="text"] {
+        max-width: 250px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .details-explanation {
+        font-size: 14px; /* Ещё меньше размер шрифта для мобильного устройства */
+    }
+}

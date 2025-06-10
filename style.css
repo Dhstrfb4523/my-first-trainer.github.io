@@ -1,0 +1,118 @@
+/* Импорт шрифта */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+/* Сброс базовых настроек */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Основной фон страницы */
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0faff; /* Основной цвет фона */
+    background-image: 
+        linear-gradient(135deg, #f0faff 50%, transparent 50%), /* Маска верхнего левого угла */
+        linear-gradient(-45deg, #dcecfb 50%, transparent 50%), /* Маска нижнего правого угла */
+        linear-gradient(45deg, #f0faff 50%, transparent 50%), /* Маска верхнего правого угла */
+        linear-gradient(-135deg, #dcecfb 50%, transparent 50%); /* Маска нижнего левого угла */
+    background-size: 200px 200px; /* Масштабируем размеры маски */
+    background-position: 0 0, 100px 100px, 100px 0, 0 100px; /* Расположение масок */
+    background-repeat: repeat; /* Повторяем маску */
+    color: #333; /* Темно-серый цвет текста */
+}
+
+/* Шапка страницы */
+header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 32px;
+    color: #2C5282; /* Темно-синий цвет заголовка */
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Центральная секция */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+    background-color: #FFFFFF; /* Белая картинка вокруг главной секции */
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Тонкая тень */
+}
+/* Кнопки навигации */
+nav ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0;
+}
+
+nav li a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    background-color: #EFEFEF;
+    padding: 15px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+nav li a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: #38BDF8;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+nav li a:hover::before {
+    opacity: 0.2;
+}
+
+nav li a:hover {
+    color: #FFF;
+    background-color: #38BDF8;
+}
+
+nav li a.active,
+nav li a:active {
+    color: #FFF;
+    background-color: #38BDF8;
+}
+
+/* Медиазапросы для мобильных устройств */
+@media screen and (max-width: 600px) {
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    nav li a {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}
+
+
