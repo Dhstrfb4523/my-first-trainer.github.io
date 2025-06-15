@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Значение логического выражения</title>
+    <link rel="stylesheet" href="style (5).css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        #task-text {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px; 
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            box-sizing: border-box;
+            margin-bottom: 10px; 
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-left: 5px; 
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        span.result-message {
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center; 
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th {
+            background-color: lightgray;
+        }
+        #question-title {
+            text-align: center; 
+            margin-bottom: 20px; 
+        }
+        details summary {
+            cursor: pointer;
+            font-style: italic;
+        }
+        details::before {
+            content: "➜"; 
+            position: absolute;
+            top: 0;
+            right: calc(100% + 10px);
+            transition: transform 0.3s ease-in-out;
+        }
+        details[open]::before {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body>
+
+<h1>Тренировочные задания по теме "Значение логического выражения"</h1>
+
+<div id="test-container">
+    <h2 id="question-intro">В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.</h2>
+    <h2 id="question-title"></h2> 
+    <table id="data-table"></table>
+    <div class="input-container">
+        <input type="text" id="user-input" placeholder="Введите ваш ответ здесь..." autofocus>
+        <div class="button-group">
+            <button onclick="checkAnswer()">Проверить ответ</button>
+            <button onclick="generateRandomTask()">Поменять задание</button>
+            <button onclick="goToMainMenu()">Вернуться в главное меню</button>
+        </div>
+    </div>
+    <span class="result-message" id="result-message"></span>
+</div>
+
+<script>
+    const tasks = [
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Пшеница & Овес»:',
+            rows: [['Пшеница | Овес', '6500'], ['Овес', '4300'], ['Пшеница', '3780']],
+            answer: 1580,
+            explanation: 'Применяем формулу множества: количество страниц по обоим запросам вычисляется как сумма запросов минус количество страниц по объединенному запросу.'
+        },
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Евклид & Аристотель & Платон»:',
+            rows: [['Евклид & Аристотель', '255'], ['Евклид & Платон', '290'], ['Евклид & (Аристотель | Платон)', '460']],
+            answer: 85,
+            explanation: 'Рассматриваем пересечение всех трёх авторов. Применяем формулу: сумма парных пересечений минус общее пересечение.'
+        },
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Пушкин»:',
+            rows: [['Пушкин | Лермонтов', '5200'], ['Лермонтов', '2100'], ['Пушкин & Лермонтов', '300']],
+            answer: 3400,
+            explanation: 'Применяем формулу дополнения: из общего количества страниц по объединённым запросам вычитаем страницы, относящиеся только к Лермонтову, и добавляем совместное пересечение.'
+        },
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Репин & Левитан»:',
+            rows: [['Репин | Левитан', '4200'], ['Левитан', '2800'], ['Репин', '3600']],
+            answer: 2200,
+            explanation: 'Используем формулу пересечения множеств: общие страницы Репина и Левитана — это сумма общих запросов минус общий объём по отдельному запросу.'
+        },
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Медведев & Путин»:',
+            rows: [['Медведев | Путин', '5500'], ['Путин', '4800'], ['Медведев', '3200']],
+            answer: 2500,
+            explanation: 'Пересечение Медведева и Путина — это суммарное количество совпадений минус количество уникальных страниц по отдельности.'
+        },
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Солнце & Луна»:',
+            rows: [['Солнце | Луна', '8000'], ['Луна', '4200'], ['Солнце', '5800']],
+            answer: 2000,
+            explanation: 'Количество общих страниц Солнце и Луны — это сумма обоих запросов минус уникальные страницы.'
+        },
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Менделеев & Ломоносов»:',
+            rows: [['Менделеев | Ломоносов', '6300'], ['Ломоносов', '3900'], ['Менделеев', '4500']],
+            answer: 2100,
+            explanation: 'Совместные страницы Менделеева и Ломоносова определяются по формуле пересечения.'
+        },
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Москва & Петербург»:',
+            rows: [['Москва | Петербург', '9200'], ['Петербург', '5600'], ['Москва', '6800']],
+            answer: 3200,
+            explanation: 'Количество совместных страниц Москвы и Петербурга вычисляется как сумма обеих столиц минус уникальный результат.'
+        },
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Краснодар & Сочи»:',
+            rows: [['Краснодар | Сочи', '7300'], ['Сочи', '3900'], ['Краснодар', '5400']],
+            answer: 2000,
+            explanation: 'Количество общих страниц Краснодара и Сочи вычисляется по принципу пересечения.'
+        },
+        {
+            intro: 'В языке запросов поискового сервера для обозначения логической операции «ИЛИ» используется символ «|», а для обозначения логической операции «И»  — символ «&». В таблице приведены запросы и количество найденных по ним страниц некоторого сегмента сети Интернет.',
+            title: 'Определите, какое количество страниц (в тысячах) будет найдено по запросу «Черноморское побережье & Крым»:',
+            rows: [['Черноморское побережье | Крым', '8500'], ['Крым', '4800'], ['Черноморское побережье', '6200']],
+            answer: 2500,
+            explanation: 'Расчёт производится путём суммирования количества общих страниц Черного моря и Крыма и последующего вычета уникального результата.'
+        },
+    ];
+
+    window.onload = () => generateRandomTask();
+
+    function generateRandomTask() {
+        const taskIndex = Math.floor(Math.random() * tasks.length);
+        const currentTask = tasks[taskIndex];
+
+        document.getElementById('question-intro').innerText = currentTask.intro;
+        document.getElementById('question-title').innerText = currentTask.title;
+
+        const table = document.getElementById('data-table');
+        while (table.firstChild) {
+            table.removeChild(table.firstChild);
+        }
+
+        const thead = document.createElement('thead');
+        const tbody = document.createElement('tbody');
+
+        const headerRow = document.createElement('tr');
+        const headers = ['Запрос', 'Найдено страниц (в тысячах)'];
+        headers.forEach(header => {
+            const th = document.createElement('th');
+            th.innerText = header;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        currentTask.rows.forEach(rowData => {
+            const row = document.createElement('tr');
+            rowData.forEach(cellValue => {
+                const cell = document.createElement('td');
+                cell.innerText = cellValue;
+                row.appendChild(cell);
+            });
+            tbody.appendChild(row);
+        });
+        table.appendChild(tbody);
+
+        document.getElementById('user-input').value = '';
+        document.getElementById('result-message').innerHTML = '';
+    }
+
+    function checkAnswer() {
+        const userInput = parseInt(document.getElementById('user-input').value.trim());
+        const currentTask = tasks.find(task => task.title === document.getElementById('question-title').innerText);
+
+        if (!isNaN(userInput)) {
+            const isCorrect = userInput === currentTask.answer;
+            const resultMessage = isCorrect ? '✅ Верно!' : '❌ Неверно.Попробуйте снова.';
+            
+            const explanation = currentTask.explanation || "";
+
+            document.getElementById('result-message').innerHTML = `
+                <details>
+                    <summary style="text-align:center;">${resultMessage}</summary>
+                    <p>${explanation}</p>
+                </details>
+            `;
+        } else {
+            alert('Введите числовой ответ.');
+        }
+    }
+
+    function goToMainMenu() {
+        window.location.href = 'index.html'; 
+    }
+</script>
+
+</body>
+</html>

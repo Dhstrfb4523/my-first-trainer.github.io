@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренировка систем счисления</title>
+    <link rel="stylesheet" href="style (2).css">
+</head>
+<body>
+    <header>
+        <h1>Тренировочные задания по теме: "Системы счисления"</h1>
+    </header>
+    <main>
+        <section id="task-section">
+            <h2><p id="task-text"></p></h2>
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Введите ваш ответ здесь...">
+            </div>
+            <div class="buttons-wrapper">
+                <button id="submit-btn">Проверить ответ</button>
+                <button id="change-task-btn">Поменять задание</button>
+                <button class="back-button" id="back-btn">Вернуться в главное меню</button>
+            </div>
+        </section>
+        <section id="result-section"></section>
+    </main>
+    <footer></footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const submitBtn = document.getElementById('submit-btn');
+            const changeTaskBtn = document.getElementById('change-task-btn');
+            const taskText = document.getElementById('task-text');
+            const userInput = document.getElementById('user-input');
+            const resultSection = document.getElementById('result-section');
+            const backBtn = document.getElementById('back-btn');
+
+            updateTask();
+
+            submitBtn.addEventListener('click', function () {
+                const answer = userInput.value.trim();
+                if (!answer) {
+                    alert('Введите ответ.');
+                    return;
+                }
+
+                const currentQuestion = taskText.textContent.split(':')[0].trim();
+                const expectedAnswer = taskData[currentQuestion];
+
+                if (answer.toLowerCase() === expectedAnswer.toLowerCase()) {
+                    showResult(true, detailedExplanation());
+                } else {
+                    showResult(false, detailedExplanation());
+                }
+
+                userInput.value = '';
+            });
+
+            changeTaskBtn.addEventListener('click', function () {
+                updateTask(); 
+            });
+
+            backBtn.addEventListener('click', function () {
+                history.back(); 
+            });
+
+            function updateTask() {
+                const generatedTask = generateTask();
+                const question = generatedTask.question;
+                const correctAnswer = generatedTask.correctAnswer;
+
+                taskData = {};
+                taskData[question] = correctAnswer;
+
+                taskText.textContent = `${question}:`;
+                clearResultSection();
+            }
+
+            function detailedExplanation() {
+                const currentQuestion = taskText.textContent.split(':')[0].trim();
+                const numberStr = currentQuestion.match(/\d+/)[0];
+
+                let explanation = '';
+
+                if (currentQuestion.includes('двоичную')) {
+                    const number = parseInt(numberStr, 10); 
+                    const targetBase = 2;
+
+                    explanation += `<strong><h2>Решение:</strong><br>Число ${number} переводим в двоичную систему:<h2><br>`;
+
+                    let tempNum = number;
+                    let steps = [];
+
+                    while (tempNum > 0) {
+                        const remainder = tempNum % targetBase; 
+                        tempNum = Math.floor(tempNum / targetBase); 
+                        steps.unshift({ remainder, quotient: tempNum }); 
+                    }
+                
+                    steps.reverse();
+
+                    steps.forEach(step => {
+                        explanation += `${step.quotient * targetBase + step.remainder} ÷ ${targetBase} = ${step.quotient}, остаток: ${step.remainder}<br>`;
+                    });
+
+                    const convertedNumber = number.toString(targetBase);
+                    explanation += `Получаем окончательную форму числа: ${convertedNumber}`;
+                } else if (currentQuestion.includes('шестнадцатеричную')) {
+                    const number = parseInt(numberStr, 10); 
+                    const targetBase = 16;
+
+                    explanation += `<strong><h2>Решение:</strong><br>Число ${number} переводим в шестнадцатеричную систему:<h2><br>`;
+                    let tempNum = number;
+                    let steps = [];
+
+                    while (tempNum > 0) {
+                        const remainder = tempNum % targetBase;
+                        tempNum = Math.floor(tempNum / targetBase); 
+                        steps.push({ remainder, quotient: tempNum });
+                    }
+
+                    steps.forEach(step => {
+                        explanation += `${step.quotient * targetBase + step.remainder} ÷ ${targetBase} = ${step.quotient}, остаток: ${step.remainder}<br>`;
+                    });
+
+                    const convertedNumber = number.toString(targetBase).toUpperCase();
+                    explanation += `Получаем окончательную форму числа: ${convertedNumber}`;
+                } else if (currentQuestion.includes('десятичную')) {
+                    const numberBin = parseInt(numberStr, 2); 
+                    const targetBase = 10;
+
+                    explanation += `<strong><h2>Решение:</strong><br>Число ${numberStr} переводим в десятичную систему:<h2><br>`;
+
+                    let sum = 0;
+                    const digits = numberStr.split('');
+                    const length = digits.length;
+                    digits.forEach((digit, index) => {
+                       const positionFromRight = length - 1 - index; 
+                   const pow = Math.pow(2, positionFromRight);
+                   const partialSum = digit * pow;
+                   sum += partialSum;
+                   explanation += `${digit} x 2^${positionFromRight} = ${partialSum}<br>`;
+               });
+
+               explanation += `Суммируем части: ${sum}`;
+           }
+           return explanation;
+       }
+
+       function clearResultSection() {
+           resultSection.innerHTML = '';
+       }
+
+       function showResult(isCorrect, explanation) {
+    const resultMessage = isCorrect ? '✅ <strong style="font-size: 24px;">Верно!</strong>' : '❌ <strong style="font-size: 24px;">Неверно. Попробуйте снова.</strong>';
+
+    resultSection.innerHTML = `
+    <details>
+        <summary>${resultMessage}</summary>
+        <hr />
+        <pre>${explanation}</pre>
+    </details>
+    `;
+}
+
+       function generateTask() {
+           const systems = [
+               { type: 'DECIMAL_TO_BINARY' },          
+               { type: 'BINARY_TO_DECIMAL' },           
+               { type: 'DECIMAL_TO_HEXADECIMAL' }      
+           ];
+
+           const chosenSystem = systems[Math.floor(Math.random() * systems.length)];
+           const number = Math.floor(Math.random() * 10000) + 1000;
+
+           let question, correctAnswer;
+
+           switch (chosenSystem.type) {
+               case 'DECIMAL_TO_BINARY':
+                   question = `Преобразуйте число ${number} из десятичной системы в двоичную`;
+                   correctAnswer = number.toString(2);
+                   break;
+
+               case 'BINARY_TO_DECIMAL':
+                   const binNumber = number.toString(2);
+                   question = `Преобразуйте число ${binNumber} из двоичной системы в десятичную`;
+                   correctAnswer = String(parseInt(binNumber, 2));
+                   break;
+
+               case 'DECIMAL_TO_HEXADECIMAL':
+                   question = `Преобразуйте число ${number} из десятичной системы в шестнадцатеричную`;
+                   correctAnswer = number.toString(16);
+                   break;
+           }
+
+           return { question, correctAnswer };
+       }
+   });
+</script>
+</body>
+</html>
